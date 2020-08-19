@@ -30,7 +30,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 -- Converted Tree: View expanded, encapsulated in LogOp_ViewAnchor
-SELECT *
+SELECT spcr.*
 FROM Person.vStateProvinceCountryRegion AS spcr
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
@@ -46,6 +46,29 @@ AS (SELECT sp.[StateProvinceID],
 SELECT spcr.*
 FROM StateProvinceCountryRegion AS spcr
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+GO
+
+
+
+-- Inline Table Valued Function (TVF)
+CREATE OR ALTER FUNCTION Production.vProductLessThan
+(
+    @ListPrice MONEY
+)
+RETURNS TABLE
+AS
+RETURN SELECT p.ProductID
+       FROM Production.Product AS p
+       WHERE p.ListPrice < @ListPrice;
+GO
+
+-- Converted Tree: Inline TVF expanded, encapsulated in LogOp_ViewAnchor
+SELECT plt.ProductID
+FROM Production.vProductLessThan(100) AS plt
+OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+
+-- Cleanup
+DROP FUNCTION IF EXISTS Production.vProductLessThan;
 
 
 
@@ -241,9 +264,9 @@ SELECT p.Name
 FROM Production.Product AS p
     JOIN Production.ProductSubcategory AS psc
         ON psc.ProductSubcategoryID = p.ProductSubcategoryID
-	JOIN Production.ProductCategory AS pc
-		ON pc.ProductCategoryID = psc.ProductCategoryID
-where pc.Name = 'Bikes'
+    JOIN Production.ProductCategory AS pc
+        ON pc.ProductCategoryID = psc.ProductCategoryID
+WHERE pc.Name = 'Bikes'
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
@@ -266,7 +289,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 -- Expression matched to a calculated col, folded back to that.
-SELECT ISNULL(([UnitPrice]*((1.0)-[UnitPriceDiscount]))*[OrderQty],(0.0)) / 100
+SELECT ISNULL(([UnitPrice] * ((1.0) - [UnitPriceDiscount])) * [OrderQty], (0.0)) / 100
 FROM Sales.SalesOrderDetail AS sod
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
@@ -276,19 +299,15 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 SELECT p.ProductID
 FROM Production.Product AS p
 WHERE LEFT(p.Name, 2) >= 'FR'
-AND LEFT(p.Name, 2) < 'FS'
+      AND LEFT(p.Name, 2) < 'FS'
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
 
--- Derived Column [Name] expression moved from above join, to inside of join
-SELECT RTRIM(p.FirstName) + ' ' + LTRIM(p.LastName) AS [Name], d.City
+-- Derived Column [Name] expression pushed down, from above to below join
+SELECT p.FirstName + ' ' + p.LastName AS [Name]
 FROM Person.Person AS p
-INNER JOIN HumanResources.Employee e ON p.BusinessEntityID = e.BusinessEntityID
-INNER JOIN
-(SELECT bea.BusinessEntityID, a.City
-FROM Person.Address AS a
-INNER JOIN Person.BusinessEntityAddress AS bea
-ON a.AddressID = bea.AddressID) AS d
-ON p.BusinessEntityID = d.BusinessEntityID
-ORDER BY p.LastName, p.FirstName
+    INNER JOIN HumanResources.Employee e
+        ON p.BusinessEntityID = e.BusinessEntityID
+OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+
