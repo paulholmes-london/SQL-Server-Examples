@@ -112,3 +112,18 @@ Index matching looks for the narrowest index that will satisfy the query fastest
 In this case the only column needed is Name.
 Index Id 3 - AK_Product_Name - is chosen. It is the narrowest of the indexes that contain the Name column
 */
+
+
+
+
+-- Finding Index Ids
+
+SELECT [Schema] = OBJECT_SCHEMA_NAME(i.object_id),
+       [Table] = OBJECT_NAME(i.object_id),
+       i.index_id,
+       IndexName = i.name
+FROM sys.indexes AS i
+ORDER BY [Schema],
+         [Table],
+         i.index_id,
+         IndexName;
