@@ -15,12 +15,12 @@
 		.st1 {fill:#171717;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
 		.st2 {fill:#262626;stroke:#f0cd66;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
 		.st3 {fill:#f0cd66;font-family:PT Sans;font-size:1.00001em;font-weight:bold}
-		.st4 {fill:#f2f2f2;font-family:Calibri;font-size:1em;font-weight:normal}
+		.st4 {fill:#f2f2f2;font-size:1em;font-weight:normal}
 		.st5 {stroke:#d8d8d8;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.6;stroke-width:0.75}
 		.st6 {fill:#3f3f3f;stroke:#f0cd66;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
-		.st7 {fill:#bfbfbf;font-family:Calibri;font-size:1.00001em}
+		.st7 {fill:#bfbfbf;font-family:PT Sans;font-size:1.00001em}
 		.st8 {stroke:#f0cd66;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.6;stroke-width:0.75}
-		.st9 {fill:#f0cd66;font-family:Calibri;font-size:1.00001em}
+		.st9 {fill:#f0cd66;font-family:PT Sans;font-size:1.00001em}
 		.st10 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
 	]]>
 	</style>
@@ -51,7 +51,7 @@
 			<v:textBlock v:margins="rect(4,4,4,5)" v:tabSpace="42.5197" v:verticalAlign="0"/>
 			<v:textRect cx="102.097" cy="83.6695" width="204.2" height="22.4037"/>
 			<rect x="0" y="72.4677" width="204.195" height="22.4037" rx="5.66929" ry="5.66929" class="st2"/>
-			<text x="5" y="87.66" class="st3" v:langID="2057"><v:paragraph/><v:tabList/>LogOp_Project <tspan class="st4">[{column}</tspan><tspan
+			<text x="5" y="87.27" class="st3" v:langID="2057"><v:paragraph/><v:tabList/>LogOp_Project <tspan class="st4">[{column}</tspan><tspan
 						class="st4">… </tspan><tspan class="st4">{column}]</tspan></text>		</g>
 		<g id="shape271-9" v:mID="271" v:groupContext="shape" transform="translate(103.281,23.7394) rotate(90)">
 			<title>Sheet.271</title>
