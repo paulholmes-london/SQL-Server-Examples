@@ -259,7 +259,16 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
---  Join Collapsed Tree: Conventional multi table join transformed to LogOp_NAryJoin
+-- Join Collapsed Tree: Redundant join eliminated.
+SELECT psc.Name
+FROM Production.ProductSubcategory AS psc
+    JOIN Production.ProductCategory AS pc
+        ON pc.ProductCategoryID = psc.ProductCategoryID
+OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+
+
+
+-- Join Collapsed Tree: Conventional multi table join transformed to LogOp_NAryJoin
 SELECT p.Name
 FROM Production.Product AS p
     JOIN Production.ProductSubcategory AS psc
