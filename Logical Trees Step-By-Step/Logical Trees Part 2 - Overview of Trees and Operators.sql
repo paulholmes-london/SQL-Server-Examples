@@ -29,6 +29,14 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
+-- Simplified Tree: Constant Folding (Comparison)
+SELECT p.ProductID
+FROM Production.Product AS p
+WHERE 1 = 0
+OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+
+
+
 -- Converted Tree: View expanded, encapsulated in LogOp_ViewAnchor
 SELECT spcr.*
 FROM Person.vStateProvinceCountryRegion AS spcr
@@ -180,10 +188,18 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Contradiction Detection - Apparent Rule: SelectOnEmpty
+-- Simplified Tree: Eliminate empty select, resulting from contradiction - Apparent Rule: SelectOnEmpty
 SELECT p.ProductID
 FROM Production.Product AS p
 WHERE 1 = 0
+OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+
+
+
+-- Simplified Tree: Contradiction (Check Constraint)
+SELECT p.Name
+FROM Production.Product AS p
+WHERE p.ListPrice < 0
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
@@ -215,7 +231,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Predicate Pushdown
+-- Simplified Tree: Predicate Pushdown; Select + Cartesian Join Converted To Regular Join (SEL JN -> JN)
 SELECT p.ProductID
 FROM Production.Product AS p
     JOIN Production.ProductSubcategory AS ps
