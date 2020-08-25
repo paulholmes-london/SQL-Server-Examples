@@ -74,7 +74,7 @@ SELECT p.Name
 FROM Production.Product AS p
 WHERE p.Color = 'Silver'
       AND p.ProductLine = 'M'
-	  AND p.FinishedGoodsFlag = 1
+      AND p.FinishedGoodsFlag = 1
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 /* *** Converted Tree: *** (partial. operators omitted for clarity, indicated by :)
 		:
@@ -85,7 +85,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 			:
 			ScaOp_Comp x_cmpEq
 		:
-Note that unlike SQL syntaxt, the logical operator can take more than 2 inputs. 
+Note that unlike SQL syntax, the logical operator can take more than 2 inputs. 
 */
 
 
@@ -142,7 +142,7 @@ Described using OR and multiple equality comparisons
 -- Optimization: Contradiction (Explicit)
 SELECT p.Name
 FROM Production.Product AS p
-WHERE 1=0
+WHERE 1 = 0
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 /* *** Converted Tree: ***
