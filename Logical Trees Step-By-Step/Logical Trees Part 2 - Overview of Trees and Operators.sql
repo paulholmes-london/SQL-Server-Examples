@@ -59,7 +59,7 @@ GO
 
 
 -- Inline Table Valued Function (TVF)
-CREATE OR ALTER FUNCTION Production.vProductLessThan
+CREATE OR ALTER FUNCTION Production.vProductListPriceLessThan
 (
     @ListPrice MONEY
 )
@@ -72,11 +72,11 @@ GO
 
 -- Converted Tree: Inline TVF expanded, encapsulated in LogOp_ViewAnchor
 SELECT plt.ProductID
-FROM Production.vProductLessThan(100) AS plt
+FROM Production.vProductListPriceLessThan(100) AS plt
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 -- Cleanup
-DROP FUNCTION IF EXISTS Production.vProductLessThan;
+DROP FUNCTION IF EXISTS Production.vProductListPriceLessThan;
 
 
 
@@ -179,7 +179,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Left Join Elimination - Apparent Rule: RedundantLOJN
+-- Simplified Tree: Left Join Elimination - Rule: RedundantLOJN
 SELECT p.ProductID
 FROM Production.Product AS p
     LEFT JOIN Production.ProductSubcategory AS psc
@@ -188,10 +188,29 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Eliminate empty select, resulting from contradiction - Apparent Rule: SelectOnEmpty
+-- Simplified tree: Outer Join Converted to Inner
+SELECT p.ProductID
+FROM Production.Product AS p
+    LEFT JOIN Production.ProductSubcategory AS psc
+        ON psc.ProductSubcategoryID = p.ProductSubcategoryID
+WHERE psc.Name = 'a'
+OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+
+
+
+-- Simplified Tree: Eliminate empty select, resulting from contradiction - Rule: SelectOnEmpty
 SELECT p.ProductID
 FROM Production.Product AS p
 WHERE 1 = 0
+OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+
+
+
+-- Simplified Tree: Contradiction
+SELECT p.Name
+FROM Production.Product AS p
+WHERE p.ListPrice < 10 AND
+	p.ListPrice > 10
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
@@ -201,6 +220,8 @@ SELECT p.Name
 FROM Production.Product AS p
 WHERE p.ListPrice < 0
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+
+
 
 
 
@@ -285,13 +306,13 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 -- Join Collapsed Tree: Conventional multi table join transformed to LogOp_NAryJoin
-SELECT p.Name
+SELECT p.Name,
+       pc.Name
 FROM Production.Product AS p
     JOIN Production.ProductSubcategory AS psc
         ON psc.ProductSubcategoryID = p.ProductSubcategoryID
     JOIN Production.ProductCategory AS pc
         ON pc.ProductCategoryID = psc.ProductCategoryID
-WHERE pc.Name = 'Bikes'
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
