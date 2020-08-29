@@ -29,7 +29,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Constant Folding (Comparison)
+-- Converted Tree: Constant Folding (Comparison)
 SELECT p.ProductID
 FROM Production.Product AS p
 WHERE 1 = 0
@@ -80,8 +80,7 @@ DROP FUNCTION IF EXISTS Production.vProductListPriceLessThan;
 
 
 
--- Converted Tree: Negation Normal Form (NNF). 
--- NNF Explainer: Rules via Morgan's laws
+-- Converted Tree: Negation normalized following De Morgan's laws
 -- https://en.wikipedia.org/wiki/De_Morgan%27s_laws
 -- Debugger observation: Not implemented in the CNormalizeExpr::NNFConvert function.
 SELECT p.ProductID
@@ -144,9 +143,6 @@ FROM Production.Product AS p
 UNION ALL
 SELECT th.ProductID
 FROM Production.TransactionHistory AS th
-UNION ALL
-SELECT pr.ProductID
-FROM Production.ProductReview AS pr
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
@@ -209,8 +205,8 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 -- Simplified Tree: Contradiction
 SELECT p.Name
 FROM Production.Product AS p
-WHERE p.ListPrice < 10 AND
-	p.ListPrice > 10
+WHERE p.ListPrice < 10
+      AND p.ListPrice > 10
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
@@ -225,7 +221,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Domain Simplification - Apparent Rule: SelPredNorm
+-- Simplified Tree: Domain Simplification - Rule: SelPredNorm
 SELECT p.ProductID
 FROM Production.Product AS p
 WHERE p.ProductID
