@@ -184,7 +184,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified tree: Outer Join Converted to Inner
+-- Simplified tree: Left Outer Join Converted to Inner - SimplifyLOJN
 SELECT p.ProductID
 FROM Production.Product AS p
     LEFT JOIN Production.ProductSubcategory AS psc
@@ -194,7 +194,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Eliminate empty select, resulting from contradiction - Rule: SelectOnEmpty
+-- Simplified Tree: Eliminate empty select - Rule: SelectOnEmpty; Based on earlier Constant Folding
 SELECT p.ProductID
 FROM Production.Product AS p
 WHERE 1 = 0
@@ -202,7 +202,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Contradiction
+-- Simplified Tree: Contradiction - Rule: SelectOnEmpty
 SELECT p.Name
 FROM Production.Product AS p
 WHERE p.ListPrice < 10
@@ -211,13 +211,11 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Contradiction (Check Constraint)
+-- Simplified Tree: Contradiction (Check Constraint) - Rule: SelectOnEmpty
 SELECT p.Name
 FROM Production.Product AS p
 WHERE p.ListPrice < 0
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
-
-
 
 
 
@@ -232,7 +230,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Eliminate Unecessary Group By - GbAggToPrj
+-- Simplified Tree: Eliminate Unecessary Group By - Rule: GbAggToPrj
 SELECT p.ProductID,
        SUM(1)
 FROM Production.Product AS p
@@ -241,14 +239,14 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Eliminate Unused Calculation  (resulted from calc col in table).
+-- Simplified Tree: Eliminate Unused Calculation  (resulted from calc col in table). - Not implemented by rule
 SELECT sod.SalesOrderID
 FROM Sales.SalesOrderDetail AS sod
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
 
--- Simplified Tree: Predicate Pushdown; Select + Cartesian Join Converted To Regular Join (SEL JN -> JN)
+-- Simplified Tree: Predicate Pushdown - Rule: SelPredNorm; Select + Cartesian Join Converted To Regular Join - Rule: SELonJN (SEL JN -> JN)
 SELECT p.ProductID
 FROM Production.Product AS p
     JOIN Production.ProductSubcategory AS ps
@@ -258,7 +256,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Predicate Commute: Index seex on equivelent of predicate specified
+-- Simplified Tree: Predicate Commute: Index seex on equivelent of predicate specified - Rule: ImpliedPredInnerAndAllLeftJn
 SELECT c.CustomerID
 FROM Sales.Customer AS c
     JOIN Sales.Store AS s
