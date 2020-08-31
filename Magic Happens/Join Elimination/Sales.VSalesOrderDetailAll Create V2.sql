@@ -8,6 +8,11 @@ CREATE OR ALTER  VIEW Sales.vSalesOrderDetailAllV2
 
 -- Comprehensive join elimination facilitated by using outer joins, where normally inner would be used (Non null referrer, FK enforced)
 
+-- NOTE:
+-- This may come at a compilation cost, for more comprehensive consumption.
+-- i.e	A select * from this view will use more CPU and memory to compile,
+--      vs. the equivelent view with 'normal' inner joins
+
 AS
 
 WITH SalesTerritoryAll AS (
