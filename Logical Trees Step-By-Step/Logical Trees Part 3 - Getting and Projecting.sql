@@ -9,7 +9,7 @@
 
 
 -- Examples should work in all version of AdventureWorks from 2008R2 onwards.
-USE AdventureWorks2019;
+USE AdventureWorks2008R2;
 
 
 

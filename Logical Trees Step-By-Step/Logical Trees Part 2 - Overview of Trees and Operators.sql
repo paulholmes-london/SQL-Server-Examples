@@ -9,7 +9,7 @@
 
 
 -- Examples should work in all version of AdventureWorks from 2008R2 onwards.
-USE AdventureWorks2019;
+USE AdventureWorks2008R2
 
 
 
@@ -37,6 +37,15 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
+-- Converted Tree: Contradiction (Predicate vs Schema Nullability)
+SELECT p.ProductID
+FROM Production.Product AS p
+WHERE p.ProductID IS NULL
+OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+-- Filter expression is normalized to constant false.
+
+
+
 -- Converted Tree: View expanded, encapsulated in LogOp_ViewAnchor
 SELECT spcr.*
 FROM Person.vStateProvinceCountryRegion AS spcr
@@ -59,7 +68,11 @@ GO
 
 
 -- Inline Table Valued Function (TVF)
-CREATE OR ALTER FUNCTION Production.vProductListPriceLessThan
+
+IF OBJECT_ID('Production.vProductListPriceLessThan','FN') IS NOT NULL
+    DROP FUNCTION Production.vProductListPriceLessThan
+GO
+CREATE FUNCTION Production.vProductListPriceLessThan
 (
     @ListPrice MONEY
 )
@@ -76,8 +89,7 @@ FROM Production.vProductListPriceLessThan(100) AS plt
 OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 -- Cleanup
-DROP FUNCTION IF EXISTS Production.vProductListPriceLessThan;
-
+DROP FUNCTION Production.vProductListPriceLessThan;
 
 
 -- Converted Tree: Negation normalized following De Morgan's laws
@@ -137,7 +149,7 @@ FROM
 
 
 
--- Input Tree: Passive LogOpProject for each table eliminated
+-- Input Tree: Passive LogOpProject for each table eliminated (UNION ALL)
 SELECT p.ProductID
 FROM Production.Product AS p
 UNION ALL
@@ -180,7 +192,7 @@ SELECT p.ProductID
 FROM Production.Product AS p
     LEFT JOIN Production.ProductSubcategory AS psc
         ON psc.ProductSubcategoryID = p.ProductSubcategoryID
-OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+OPTION (RECOMPILE, QUERYTRACEON 8621, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
 
@@ -190,7 +202,7 @@ FROM Production.Product AS p
     LEFT JOIN Production.ProductSubcategory AS psc
         ON psc.ProductSubcategoryID = p.ProductSubcategoryID
 WHERE psc.Name = 'a'
-OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
+OPTION (RECOMPILE, QUERYTRACEON 8621, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUERYTRACEON 3604);
 
 
 
@@ -219,7 +231,7 @@ OPTION (RECOMPILE, QUERYTRACEON 8605, QUERYTRACEON 8606, QUERYTRACEON 8607, QUER
 
 
 
--- Simplified Tree: Domain Simplification - Rule: SelPredNorm
+-- Simplified Tree: Domain Simplification (Ranges) - Rule: SelPredNorm
 SELECT p.ProductID
 FROM Production.Product AS p
 WHERE p.ProductID

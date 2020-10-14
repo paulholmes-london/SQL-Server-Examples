@@ -8,7 +8,7 @@
 -- http://www.paulholmes.net/2020/08/logical-trees-part-4-filtering-with.html
 
 -- Examples should work in all version of AdventureWorks from 2008R2 onwards.
-USE AdventureWorks2019;
+USE AdventureWorks2008R2;
 
 
 
