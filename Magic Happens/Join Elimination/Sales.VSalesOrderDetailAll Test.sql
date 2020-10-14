@@ -3,7 +3,39 @@ SET STATISTICS TIME ON;
 
 
 -----------------------------------------------
--- Compile & Execution For One Column need joins.
+-- Compile & Execution For Minimal Use
+-----------------------------------------------
+
+/* -- Normal Joins
+Incomplete Elimination, e.g. joins to SalesTerritory, ShipMethod, Address etc not required
+Compile Time: 105
+Compile Memory: 17128
+Reason For Early Termination: Good Enough Plan Found.
+Logical Reads: 1,121
+*/
+
+SELECT  sod.SalesOrderID,
+        sod.SalesOrderDetailID
+FROM Sales.vSalesOrderDetailAllV1 AS sod
+OPTION (RECOMPILE);
+
+
+/* -- All Outer Joins
+Comprehensive Elimination
+Compile Time: 106
+Compile Memory: 16576
+Logical Reads: 420
+*/
+SELECT  sod.SalesOrderID,
+        sod.SalesOrderDetailID
+FROM Sales.vSalesOrderDetailAllV2 AS sod
+OPTION (RECOMPILE);
+
+
+
+
+-----------------------------------------------
+-- Compile & Execution For One Column needing joins.
 -----------------------------------------------
 
 -- Test query, get the last name of the sales person for each order detail line.

@@ -1,7 +1,11 @@
-USE [AdventureWorks2017]
+USE AdventureWorks2008R2
 GO
 
-CREATE OR ALTER  VIEW Sales.vSalesOrderDetailAllV1
+IF OBJECT_ID('Sales.vSalesOrderDetailAllV1','V') IS NOT NULL
+    DROP VIEW Sales.vSalesOrderDetailAllV1
+GO
+
+CREATE VIEW Sales.vSalesOrderDetailAllV1
 
 AS
 
@@ -255,10 +259,32 @@ SpecialOfferProductAll AS
 
         ProductModelId                          = p.ProductModelID,
         ProductModelName                        = pm.Name,
-        ProductModelCatalogDescription          = pm.CatalogDescription,
         ProductModelInstructions                = pm.Instructions,
         ProductModelrowguid                     = pm.rowguid,    
         ProductModelModifiedDate                = pm.ModifiedDate,
+
+        ProductModelCatalogDescription                          = pm.CatalogDescription,
+        ProductModelCatalogDescriptionSummary                   = vpmcd.Summary,
+        ProductModelCatalogDescriptionManufacturer              = vpmcd.Manufacturer,
+        ProductModelCatalogDescriptionCopyright                 = vpmcd.Copyright,
+        ProductModelCatalogDescriptionProductURL                = vpmcd.ProductURL,
+        ProductModelCatalogDescriptionWarrantyPeriod            = vpmcd.WarrantyPeriod,
+        ProductModelCatalogDescriptionWarrantyDescription       = vpmcd.WarrantyDescription,
+        ProductModelCatalogDescriptionNoOfYears                 = vpmcd.NoOfYears,
+        ProductModelCatalogDescriptionMaintenanceDescription    = vpmcd.MaintenanceDescription,
+        ProductModelCatalogDescriptionWheel                     = vpmcd.Wheel,
+        ProductModelCatalogDescriptionSaddle                    = vpmcd.Saddle,
+        ProductModelCatalogDescriptionPedal                     = vpmcd.Pedal,
+        ProductModelCatalogDescriptionBikeFrame                 = vpmcd.BikeFrame,
+        ProductModelCatalogDescriptionCrankset                  = vpmcd.Crankset,
+        ProductModelCatalogDescriptionPictureAngle              = vpmcd.PictureAngle,
+        ProductModelCatalogDescriptionPictureSize               = vpmcd.PictureSize,
+        ProductModelCatalogDescriptionProductPhotoID            = vpmcd.ProductPhotoID,
+        ProductModelCatalogDescriptionMaterial                  = vpmcd.Material,
+        ProductModelCatalogDescriptionColor                     = vpmcd.Color,
+        ProductModelCatalogDescriptionProductLine               = vpmcd.ProductLine,
+        ProductModelCatalogDescriptionStyle                     = vpmcd.Style,
+        ProductModelCatalogDescriptionRiderExperience           = vpmcd.RiderExperience,
 
         ProductSubcategoryID                    = p.ProductSubcategoryID,
         ProductSubCategoryName                  = ps.ProductSubCategoryName,
@@ -282,6 +308,8 @@ FROM Sales.SpecialOfferProduct AS sop
                 ON ps.ProductSubcategoryID = p.ProductSubcategoryID
                 LEFT JOIN Production.ProductModel AS pm
                     ON pm.ProductModelID = p.ProductModelID
+                    LEFT JOIN Production.vProductModelCatalogDescription AS vpmcd
+                        ON vpmcd.ProductModelID = pm.ProductModelID
             LEFT JOIN Production.UnitMeasure AS umsize
                 ON umsize.UnitMeasureCode = p.SizeUnitMeasureCode
             LEFT JOIN Production.UnitMeasure AS umweight
@@ -347,10 +375,32 @@ SELECT  SalesOrderID                    = sod.SalesOrderID,
         
         ProductModelId                  = sop.ProductModelId,
         ProductModelName                = sop.ProductModelName,                
-        ProductModelCatalogDescription  = sop.ProductModelCatalogDescription,    
         ProductModelInstructions        = sop.ProductModelInstructions,        
         ProductModelrowguid             = sop.ProductModelrowguid,                
         ProductModelModifiedDate        = sop.ProductModelModifiedDate,        
+
+        ProductModelCatalogDescription                          = sop.ProductModelCatalogDescription,
+        ProductModelCatalogDescriptionSummary                   = sop.ProductModelCatalogDescriptionSummary,
+        ProductModelCatalogDescriptionManufacturer              = sop.ProductModelCatalogDescriptionManufacturer,
+        ProductModelCatalogDescriptionCopyright                 = sop.ProductModelCatalogDescriptionCopyright,
+        ProductModelCatalogDescriptionProductURL                = sop.ProductModelCatalogDescriptionProductURL,
+        ProductModelCatalogDescriptionWarrantyPeriod            = sop.ProductModelCatalogDescriptionWarrantyPeriod,
+        ProductModelCatalogDescriptionWarrantyDescription       = sop.ProductModelCatalogDescriptionWarrantyDescription,
+        ProductModelCatalogDescriptionNoOfYears                 = sop.ProductModelCatalogDescriptionNoOfYears,
+        ProductModelCatalogDescriptionMaintenanceDescription    = sop.ProductModelCatalogDescriptionMaintenanceDescription, 
+        ProductModelCatalogDescriptionWheel                     = sop.ProductModelCatalogDescriptionWheel,
+        ProductModelCatalogDescriptionSaddle                    = sop.ProductModelCatalogDescriptionSaddle,
+        ProductModelCatalogDescriptionPedal                     = sop.ProductModelCatalogDescriptionPedal,
+        ProductModelCatalogDescriptionBikeFrame                 = sop.ProductModelCatalogDescriptionBikeFrame,
+        ProductModelCatalogDescriptionCrankset                  = sop.ProductModelCatalogDescriptionCrankset,
+        ProductModelCatalogDescriptionPictureAngle              = sop.ProductModelCatalogDescriptionPictureAngle,
+        ProductModelCatalogDescriptionPictureSize               = sop.ProductModelCatalogDescriptionPictureSize,
+        ProductModelCatalogDescriptionProductPhotoID            = sop.ProductModelCatalogDescriptionProductPhotoID,
+        ProductModelCatalogDescriptionMaterial                  = sop.ProductModelCatalogDescriptionMaterial, 
+        ProductModelCatalogDescriptionColor                     = sop.ProductModelCatalogDescriptionColor,
+        ProductModelCatalogDescriptionProductLine               = sop.ProductModelCatalogDescriptionProductLine,
+        ProductModelCatalogDescriptionStyle                     = sop.ProductModelCatalogDescriptionStyle,
+        ProductModelCatalogDescriptionRiderExperience           = sop.ProductModelCatalogDescriptionRiderExperience,
 
         ProductSubcategoryID            = sop.ProductProductSubcategoryID,        
         ProductSubCategoryName          = sop.ProductSubCategoryName,            
